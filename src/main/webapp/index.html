@@ -1,0 +1,124 @@
+<!doctype html>
+<html ng-app="awardApp">
+<head>
+<title>Award Image Spinner</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+<script src="/resources/js/award.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600'
+	rel='stylesheet' type='text/css'>
+
+<!-- getSkeleton.com -->
+<link rel="stylesheet" type="text/css"
+	href="/resources/style/skeleton/normalize.css" />
+<link rel="stylesheet" type="text/css"
+	href="/resources/style/skeleton/skeleton.css" />
+
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="section header row">
+			<h1>Award Image Spinner</h1>
+		</div>
+		<hr>
+		<div ng-controller="allAwards">
+			<div class="row">
+				<div class="one-third column">
+					<label>Welcome</label>
+					<p>Create an image of what your Military Award ribbons
+						look like when worn or on display.</p>
+					<p>Dig out a DD214, add your ribbons to the list, and hit Go.</p>
+					<p>Combines all your ribbons into a single image, in the
+						correct order</p>
+					<p>Save it to upload on FB or your military profile online. Or
+						print it out and use 100mph tape to stick it to your chest or
+						shadowbox. Cheaper than buying ribbons!</p>
+
+					<!-- </br> Gallia est omnis divisa in partes tres, quarum unam incolunt
+					Belgae, aliam Aquitani, tertiam qui ipsorum lingua Celtae, nostra
+					Galli appellantur. Hi omnes lingua, institutis, legibus inter se
+					differunt. Gallos ab Aquitanis Garumna flumen, a Belgis Matrona et
+					Sequana dividit.  -->
+				</div>
+				<div class="two-thirds column">
+					<div class="row">
+						<form name="myForm">
+							<label for="repeatSelect"> Select Award: </label> <select
+								width=50 name="repeatSelect" id="repeatSelect"
+								ng-model="selectedAward"
+								ng-options="options.awardName for options in allAwards | orderBy:'awardName'">
+							</select> <br /> <br />
+							<button class="button button-primary"
+								ng-click='selectedAwards.push(selectedAward)'>Add</button>
+							<br> <br> <label ng-hide="selectedAwards.length==0">Selected
+								Awards:</label>
+							<ul>
+								<li ng-repeat="award in selectedAwards">{{award.awardName}}</li>
+							</ul>
+
+							<br />
+							<button class="button button-primary"
+								ng-hide="selectedAwards.length == 0"
+								ng-click='submitSelectedAwards()'>Go</button>
+						</form>
+
+					</div>
+					<div ng-hide="combinedImage == null" class="row">
+						<div>
+							<!-- Display output image -->
+							<label for="generatedImage">Your Ribbons:</label> <img
+								name="generatedImage"
+								ng-src="data:image/PNG;base64,{{combinedImage}}">
+						</div>
+						<br>
+						<div>
+							<a class="button" href="data:image/PNG;base64,{{combinedImage}}"
+								download="myRibbons.png"> Save</a>
+							<button class="button" ng-click="reset()">Reset</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+
+			<hr />
+			<div ng-hide=showme>
+				<a href="" ng-click="showme=true">Show Full List</a>
+			</div>
+
+			<div ng-show="showme">
+				<a href="" ng-click="showme=false">Hide Full List</a>
+				<h2>All</h2>
+
+
+
+				<table>
+					<thead>
+						<tr>
+							<td></td>
+							<td>Name</td>
+							<td>Ribbon</td>
+							<td>More Info</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="b in allAwards">
+							<td>{{b.id}}</td>
+							<td>{{b.awardName}}</td>
+							<td><img ng-src="data:image/PNG;base64,{{b.ribbonImage}}"></td>
+							<td><a
+								href="https://en.wikipedia.org/wiki/Awards_and_decorations_of_the_United_States_Armed_Forces">Wiki</a></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+		<!-- Controller -->
+	</div>
+	<!-- Container -->
+</body>
+</html>
