@@ -4,7 +4,7 @@ var awardApp = angular.module('awardApp', []);
 
 awardApp.controller('allAwards', function($scope, $http) {
     
-	$http.get('/awards/awards/all').
+	$http.get('/awards/all').
     then(function(response) {
         $scope.allAwards = response.data;
     });
@@ -25,7 +25,7 @@ awardApp.controller('allAwards', function($scope, $http) {
     	
     	$http({
     		method : "POST",
-    		url : "/awards/awards/submitSelectedAwards",
+    		url : "/awards/submitSelectedAwards",
     		data : $scope.selectedAwards
     	}).success(function(data, status, headers, config) {
     		$scope.imageText = data.text;

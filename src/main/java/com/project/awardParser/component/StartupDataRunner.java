@@ -2,12 +2,15 @@ package com.project.awardParser.component;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
+
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +29,23 @@ public class StartupDataRunner implements ApplicationRunner {
 	@Autowired
 	AwardRepository awardRepo;
 
+	@Autowired
+	ServletContext servletContext;
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
 		printRuntimeArgs(args);
 
-		
-		loadFileData("src/main/resources/data/awardList.txt");
-		
+		// loadFileData("src/main/resources/data/awardList.txt");
+		try {
+		URL url = servletContext.getResource("/resources/data/awardList.txt");
+//		loadFileData(url.getPath());
+		} catch(Exception someException) {
+			System.err.println("Oops, something didn't work loading award list");
+			someException.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -47,7 +59,8 @@ public class StartupDataRunner implements ApplicationRunner {
 
 		awardRepo.deleteAll();
 
-		try (Stream<String> stream = Files.lines(Paths.get(filename))) {
+		try (Stream<String> stream = Files
+				.lines(Paths.get(servletContext.getResource("/resources/data/awardList.txt").getPath()))) {
 
 			ArrayList<Award> entryList = new ArrayList<Award>();
 
@@ -65,7 +78,7 @@ public class StartupDataRunner implements ApplicationRunner {
 	/**
 	 * 
 	 * @param String
-	 *            line example format: 
+	 *            line example format:
 	 */
 	public Award createAwardObject(String line) {
 
@@ -74,13 +87,15 @@ public class StartupDataRunner implements ApplicationRunner {
 		Award e = new Award();
 		e.setAwardName(parsedLine[0]);
 		try {
-			e.setRibbonImage(Files.readAllBytes(Paths.get(("src/main/resources/img/medals/army_service_ribbon.jpg"))));
+			
+//			e.setRibbonImage(Files.readAllBytes(Paths.get(servletContext.getResource("/resources/img/medals/air_force_cross.png").getPath())));
+			e.setRibbonImage(Files.readAllBytes(Paths.get(("src/main/resources/img/medals/air_force_cross.png"))));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-//		e.setRibbonImageName("");
-//		e.setWikiPage("https://en.wikipedia.org/wiki/Awards_and_decorations_of_the_United_States_Armed_Forces");
+		// e.setRibbonImageName("");
+		// e.setWikiPage("https://en.wikipedia.org/wiki/Awards_and_decorations_of_the_United_States_Armed_Forces");
 
 		return e;
 

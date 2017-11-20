@@ -1,7 +1,9 @@
 package com.project.awardParser.controller;
 
+import java.io.FileOutputStream;
 import java.util.List;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.awardParser.excel.ExcelGenerator;
 import com.project.awardParser.image.ImageFormatter;
 import com.project.awardParser.model.Award;
 import com.project.awardParser.model.AwardRepository;
@@ -41,7 +44,13 @@ public class AwardsController {
 		return ci;
 	}
 	
-	
+	@GetMapping(path="/generateExcel") 
+	public @ResponseBody void genearateExcelFile(@RequestBody List<Award> selectedAwards) {
+		
+		XSSFWorkbook wb = ExcelGenerator.generateWorkbookFromListOfAwards(selectedAwards);
+		
+		
+	}
 //	@GetMapping(path = "/idAndName") {
 //
 //		
