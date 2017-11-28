@@ -16,6 +16,12 @@ awardApp.controller('allAwards', function($scope, $http) {
     	alert("BANG!");
     }
     
+    $scope.addSelectedAward = function( award ) {
+    	if($scope.selectedAwards.indexOf(award) == -1) {
+    		$scope.selectedAwards.push(award);
+    	}
+    }
+    
     $scope.reset = function() {
     	$scope.combinedImage = null;
     	$scope.selectedAwards.length = 0

@@ -28,15 +28,16 @@
 			<div class="row">
 				<div class="one-third column">
 					<label>Welcome</label>
-					<p>Create an image of what your Military Award ribbons
-						look like when worn or on display.</p>
+					<p>Create an image of what your Military Award ribbons look
+						like when worn or on display.</p>
 					<p>Dig out a DD214, add your ribbons to the list, and hit Go.</p>
 					<p>Combines all your ribbons into a single image, in the
 						correct order</p>
 					<p>Save it to upload on FB or your military profile online. Or
-						print it out and use 100mph tape to stick it to your chest or
-						shadowbox. Cheaper than buying ribbons!</p>
-					<p>Questions, bugs, comments etc. can be sent to fwdeible@gmail.com</p>
+						print it out and 100mph tape it to your chest or shadowbox.
+						Cheaper than buying ribbons!</p>
+					<p>Questions, bugs, comments etc. can be sent to
+						fwdeible@gmail.com</p>
 
 					<!-- </br> Gallia est omnis divisa in partes tres, quarum unam incolunt
 					Belgae, aliam Aquitani, tertiam qui ipsorum lingua Celtae, nostra
@@ -48,12 +49,12 @@
 					<div class="row">
 						<form name="myForm">
 							<label for="repeatSelect"> Select Award: </label> <select
-								width=50 name="repeatSelect" id="repeatSelect"
-								ng-model="selectedAward"
+								name="repeatSelect" id="repeatSelect" ng-model="selectedAward"
+								style="width:300px;"
 								ng-options="options.awardName for options in allAwards | orderBy:'awardName'">
 							</select> <br /> <br />
 							<button class="button button-primary"
-								ng-click='selectedAwards.push(selectedAward)'>Add</button>
+								ng-click='addSelectedAward(selectedAward)'>Add</button>
 							<br> <br> <label ng-hide="selectedAwards.length==0">Selected
 								Awards:</label>
 							<ul>
@@ -75,11 +76,11 @@
 								ng-src="data:image/PNG;base64,{{combinedImage}}">
 						</div>
 						<br>
-						<div>
+						<!--  <div>
 							<a class="button" href="data:image/PNG;base64,{{combinedImage}}"
 								download="myRibbons.png"> Save</a>
 							<button class="button" ng-click="reset()">Reset</button>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -93,9 +94,11 @@
 			<div ng-show="showme">
 				<a href="" ng-click="showme=false">Hide Full List</a>
 				<h2>All</h2>
-
-
-
+				<p>
+					This list is based on the <a
+						href="http://www.tioh.hqda.pentagon.mil/Catalog/HeraldryList.aspx?CategoryId=5&grp=4&menu=Decorations%20and%20Medals">
+						Institute of Heraldry </a> List.
+				</p>
 				<table>
 					<thead>
 						<tr>
@@ -117,6 +120,10 @@
 				</table>
 
 			</div>
+		</div>
+		<hr />
+		<div>
+			<a href="https://github.com/fwdeible/awards_site">git</a>
 		</div>
 		<!-- Controller -->
 	</div>

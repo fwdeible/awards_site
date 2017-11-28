@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
+import org.hibernate.dialect.function.PositionSubstringFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -37,11 +38,11 @@ public class StartupDataRunner implements ApplicationRunner {
 
 		printRuntimeArgs(args);
 
-		// loadFileData("src/main/resources/data/awardList.txt");
+		loadFileData("src/main/resources/data/awardList.txt");
 		try {
-		URL url = servletContext.getResource("/resources/data/awardList.txt");
-//		loadFileData(url.getPath());
-		} catch(Exception someException) {
+			URL url = servletContext.getResource("/resources/data/awardList.txt");
+			// loadFileData(url.getPath());
+		} catch (Exception someException) {
 			System.err.println("Oops, something didn't work loading award list");
 			someException.printStackTrace();
 		}
@@ -59,8 +60,11 @@ public class StartupDataRunner implements ApplicationRunner {
 
 		awardRepo.deleteAll();
 
-		try (Stream<String> stream = Files
-				.lines(Paths.get(servletContext.getResource("/resources/data/awardList.txt").getPath()))) {
+		// try (Stream<String> stream = Files
+		// .lines(Paths.get(servletContext.getResource("/resources/data/awardList.txt").getPath())))
+		// {
+
+		try (Stream<String> stream = Files.lines(Paths.get("/srv/www/awards/awards_list.csv"))) {
 
 			ArrayList<Award> entryList = new ArrayList<Award>();
 
@@ -82,21 +86,40 @@ public class StartupDataRunner implements ApplicationRunner {
 	 */
 	public Award createAwardObject(String line) {
 
-		String[] parsedLine = line.split("\\|");
+		String[] parsedLine = line.split(",");
 
 		Award e = new Award();
-		e.setAwardName(parsedLine[0]);
-		try {
-			
-//			e.setRibbonImage(Files.readAllBytes(Paths.get(servletContext.getResource("/resources/img/medals/air_force_cross.png").getPath())));
-			e.setRibbonImage(Files.readAllBytes(Paths.get(("src/main/resources/img/medals/air_force_cross.png"))));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		// e.setRibbonImageName("");
-		// e.setWikiPage("https://en.wikipedia.org/wiki/Awards_and_decorations_of_the_United_States_Armed_Forces");
 
+		if (parsedLine.length > 0) {
+			e.setAwardName(parsedLine[0]);
+			
+			String possibleCannonicalName = parsedLine[1];
+			System.out.println(possibleCannonicalName);
+			
+			if(possibleCannonicalName != null && !possibleCannonicalName.isEmpty()) {
+				e.setCannonicalName(possibleCannonicalName);
+			} else {
+				e.setCannonicalName("blank");
+			}
+			
+			
+			try {
+
+				// e.setRibbonImage(Files.readAllBytes(Paths.get(servletContext.getResource("/resources/img/medals/air_force_cross.png").getPath())));
+				// e.setRibbonImage(Files.readAllBytes(Paths.get(("src/main/resources/img/medals/air_force_cross.png"))));
+//				e.setRibbonImage(Files.readAllBytes(Paths.get("/srv/www/awards/medal_images_106/legion_of_merit.png")));
+				e.setRibbonImage(Files.readAllBytes(Paths.get("/srv/www/awards/medal_images_106/" + e.getCannonicalName() + ".png")));
+
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+
+			e.setPrecedence(Integer.parseInt(parsedLine[2]));
+			
+			// e.setWikiPage("https://en.wikipedia.org/wiki/Awards_and_decorations_of_the_United_States_Armed_Forces");
+		}
 		return e;
 
 	}

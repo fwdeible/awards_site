@@ -40,7 +40,7 @@ public class AwardsController {
 //		System.out.println(selectedAwards..getAwardName());
 		CompletedImage ci = new CompletedImage();
 		ci.setText("Completed Image");
-		ci.setImage(ImageFormatter.createCombinedImage(selectedAwards));
+		ci.setImage(ImageFormatter.createSortedCombinedImage(selectedAwards));
 		return ci;
 	}
 	

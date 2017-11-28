@@ -23,6 +23,8 @@ public class Award {
 	@Lob
 	private byte[] ribbonImage;
 	private String description;
+	private String cannonicalName;
+	private int precedence;
 	// private String category;
 	// private Color[] colors;
 	private String wikiPage;
@@ -89,5 +91,21 @@ public class Award {
 	// public void setRibbonImage(BufferedImage ribbonImage) {
 	// this.ribbonImage = ribbonImage;
 	// }
+
+	public String getCannonicalName() {
+		return cannonicalName;
+	}
+
+	public void setCannonicalName(String cannonicalName) {
+		this.cannonicalName = cannonicalName;
+	}
+
+	public int getPrecedence() {
+		return precedence;
+	}
+
+	public void setPrecedence(int precedence) {
+		this.precedence = precedence;
+	}
 
 }
